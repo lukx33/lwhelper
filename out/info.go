@@ -22,6 +22,7 @@ type Info interface {
 	CatchError(err error) bool
 	NotValid() bool
 	InfoAddTrace(result ResultT, msg string, skipFrames int)
+	InfoAddVar(name string, value any) Info
 	InfoResult() ResultT
 	InfoMessage() string
 	InfoPrint()
