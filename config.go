@@ -84,8 +84,8 @@ func (c *configStoreS) String(key string) (func() string, func(value string) out
 func (c *configStoreS) Int(key string) (func() int, func(value int) out.Info) {
 
 	return func() int { // <======== Get
-			v, _ := c.Data[key].(int)
-			return v
+			v, _ := c.Data[key].(float64)
+			return int(v)
 
 		}, func(value int) out.Info { // <======== Set
 			c.Data[key] = value
