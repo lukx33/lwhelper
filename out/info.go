@@ -161,6 +161,7 @@ func (info *DontUseMeInfoS) InfoAddTrace(result ResultT, msg string, skipFrames 
 		Message:   msg,
 		Traceback: Trace(skipFrames),
 	})
+	info.Result = result
 }
 
 func (info *DontUseMeInfoS) InfoAddVar(name string, value any) Info {
