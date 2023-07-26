@@ -19,16 +19,11 @@ type traceS struct {
 }
 
 type Info interface {
-	// InfoSetSuccess() Info
-	// InfoSetError(err error) Info
-	// InfoSetResult(result ResultT) Info
-	// InfoAddVar(name string, value any) Info
-
+	CatchError(err error) bool
 	NotValid() bool
+	InfoAddTrace(result ResultT, msg string, skipFrames int)
 	InfoMessage() string
 	InfoPrint()
-
-	InfoAddTrace(result ResultT, msg string, skipFrames int)
 }
 
 type ResultT uint
