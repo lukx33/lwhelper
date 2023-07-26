@@ -268,11 +268,11 @@ func Trace(skip int) []string {
 }
 
 var framesLessImportant = map[string]bool{
-	"/lwhelper/out/":       true,
-	"/golang/src/runtime/": true,
-	"/global/result.go":    true,
-	"/fyne/widget/":        true,
-	"/fyne/internal/":      true,
+	"github.com/lukx33/lwhelper": true,
+	"/golang/src/runtime/":       true,
+	"/global/result.go":          true,
+	"/fyne/widget/":              true,
+	"/fyne/internal/":            true,
 }
 
 // func ErrorHandler[T any](out T, err error) (*ResultS, T) {
