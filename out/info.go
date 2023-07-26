@@ -22,6 +22,7 @@ type Info interface {
 	CatchError(err error) bool
 	NotValid() bool
 	InfoAddTrace(result ResultT, msg string, skipFrames int)
+	InfoResult() ResultT
 	InfoMessage() string
 	InfoPrint()
 }
@@ -199,8 +200,13 @@ func (info *DontUseMeInfoS) NotValid() bool {
 	return true
 }
 
+func (info *DontUseMeInfoS) InfoResult() ResultT {
+	return info.Result
+}
+
 func (info *DontUseMeInfoS) InfoMessage() string {
-	return fmt.Sprintf("Result: %d %s %s", info.Result, info.Vars["error"], info.Vars["msg"])
+	return fmt.Sprintf("Result: %d", info.Result)
+	// TODO: info.Trace[*].Msg
 }
 
 func (info *DontUseMeInfoS) InfoPrint() {
