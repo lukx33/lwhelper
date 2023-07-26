@@ -1,4 +1,4 @@
-module lwhelper
+module github.com/lukx33/lwhelper
 
 go 1.20
 
