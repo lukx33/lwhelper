@@ -19,14 +19,16 @@ type traceS struct {
 }
 
 type Info interface {
-	InfoSetSuccess() Info
-	InfoSetError(err error) Info
-	InfoSetResult(result ResultT) Info
-	InfoAddVar(name string, value any) Info
+	// InfoSetSuccess() Info
+	// InfoSetError(err error) Info
+	// InfoSetResult(result ResultT) Info
+	// InfoAddVar(name string, value any) Info
 
 	NotValid() bool
 	InfoMessage() string
 	InfoPrint()
+
+	InfoAddTrace(result ResultT, msg string, skipFrames int)
 }
 
 type ResultT uint
@@ -142,7 +144,7 @@ func NewNotFound() Info {
 
 func NewForbidden() Info {
 
-	r := &DontUseMeInfoS{
+	info := &DontUseMeInfoS{
 		Trace: []traceS{{
 			Result:    Forbidden,
 			Traceback: Trace(0),
@@ -150,91 +152,70 @@ func NewForbidden() Info {
 		Result: Forbidden,
 	}
 
-	r.InfoPrint()
-	return r
+	info.InfoPrint()
+	return info
 }
 
 // ---
 // setters
 
-func (r *DontUseMeInfoS) InfoSetSuccess() Info {
-
-	r.Trace = append(r.Trace, traceS{
-		Result:    Success,
-		Traceback: Trace(0),
+func (info *DontUseMeInfoS) InfoAddTrace(result ResultT, msg string, skipFrames int) {
+	info.Trace = append(info.Trace, traceS{
+		Result:    result,
+		Message:   msg,
+		Traceback: Trace(skipFrames),
 	})
-	r.Result = Success
-
-	return r
 }
 
-func (r *DontUseMeInfoS) InfoSetError(err error) Info {
+func (info *DontUseMeInfoS) InfoAddVar(name string, value any) Info {
+
+	if info.Vars == nil {
+		info.Vars = map[string]string{}
+	}
+	info.Vars[name] = fmt.Sprint(value)
+
+	return info
+}
+
+func (info *DontUseMeInfoS) CatchError(err error) bool {
 
 	if err == nil {
-		return r
+		return false
 	}
 
-	r.Trace = append(r.Trace, traceS{
-		Result:    InternalServerError,
-		Message:   err.Error(),
-		Traceback: Trace(0),
-	})
-	r.Result = InternalServerError
-
-	r.InfoPrint()
-	return r
-}
-
-func (r *DontUseMeInfoS) InfoSetResult(result ResultT) Info {
-
-	r.Trace = append(r.Trace, traceS{
-		Result:    result,
-		Traceback: Trace(0),
-	})
-	r.Result = result
-
-	r.InfoPrint()
-	return r
-}
-
-func (r *DontUseMeInfoS) InfoAddVar(name string, value any) Info {
-
-	if r.Vars == nil {
-		r.Vars = map[string]string{}
-	}
-	r.Vars[name] = fmt.Sprint(value)
-
-	return r
+	info.InfoAddTrace(InternalServerError, err.Error(), 0)
+	info.InfoPrint()
+	return true
 }
 
 // ---
 // checkers
 
-func (r *DontUseMeInfoS) NotValid() bool {
+func (info *DontUseMeInfoS) NotValid() bool {
 
-	if r == nil {
+	if info == nil {
 		return true
 	}
 
-	if r.Result == Success {
+	if info.Result == Success {
 		return false
 	}
 
 	return true
 }
 
-func (r *DontUseMeInfoS) InfoMessage() string {
-	return fmt.Sprintf("Result: %d %s %s", r.Result, r.Vars["error"], r.Vars["msg"])
+func (info *DontUseMeInfoS) InfoMessage() string {
+	return fmt.Sprintf("Result: %d %s %s", info.Result, info.Vars["error"], info.Vars["msg"])
 }
 
-func (r *DontUseMeInfoS) InfoPrint() {
+func (info *DontUseMeInfoS) InfoPrint() {
 	// traceStr := strings.Join(r.Traceback, "\n\t")
 
 	// fmt.Printf("%s\n\t%s\n",
 	// 	r.String(),
 	// 	traceStr,
 	// )
-	PrintJSON(r)
+	PrintJSON(info)
 }
 
 // ---
@@ -281,3 +262,21 @@ var framesLessImportant = map[string]bool{
 // 	}
 // 	return Success(), out
 // }
+
+// ---
+
+func SetSuccess[T Info](info T) T {
+	info.InfoAddTrace(Success, "", 0)
+	return info
+}
+
+func CatchError[T Info](info T, err error) T {
+
+	if err == nil {
+		return info
+	}
+
+	info.InfoAddTrace(InternalServerError, err.Error(), 0)
+	info.InfoPrint()
+	return info
+}

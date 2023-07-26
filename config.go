@@ -8,7 +8,7 @@ import (
 	"github.com/lukx33/lwhelper/out"
 )
 
-type ConfigData interface {
+type ConfigStore interface {
 	out.Info
 
 	String(key string) (func() string, func(value string) out.Info)
@@ -18,29 +18,26 @@ type ConfigData interface {
 
 // ---
 
-func LoadConfigFile(fp string) ConfigData {
+func LoadConfigFile(fp string) ConfigStore {
 
 	if strings.Contains(fp, "~") {
 		home, _ := os.UserHomeDir()
 		fp = strings.ReplaceAll(fp, "~", home)
 	}
 
-	data := &configStoreS{
+	store := &configStoreS{
 		FilePath: fp,
 		Data:     map[string]interface{}{},
 	}
 
-	buf, _ := os.ReadFile(data.FilePath)
+	buf, _ := os.ReadFile(store.FilePath)
 	if len(buf) > 0 {
-		err := json.Unmarshal(buf, &data.Data)
-		if err != nil {
-			data.InfoSetError(err)
-			return data
+		if store.CatchError(json.Unmarshal(buf, &store.Data)) {
+			return store
 		}
 	}
 
-	data.InfoSetSuccess()
-	return data
+	return out.SetSuccess(store)
 }
 
 // ---
