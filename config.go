@@ -11,9 +11,9 @@ import (
 type ConfigStore interface {
 	out.Info
 
-	String(key string) (func() string, func(value string) out.Info)
-	Int(key string) (func() int, func(value int) out.Info)
-	Bool(key string) (func() bool, func(value bool) out.Info)
+	String(key string, defval string) (func() string, func(value string) out.Info)
+	Int(key string, defval int) (func() int, func(value int) out.Info)
+	Bool(key string, defval bool) (func() bool, func(value bool) out.Info)
 }
 
 // ---
@@ -66,10 +66,13 @@ func (c *configStoreS) save() out.Info {
 // ---
 // string
 
-func (c *configStoreS) String(key string) (func() string, func(value string) out.Info) {
+func (c *configStoreS) String(key string, defval string) (func() string, func(value string) out.Info) {
 
 	return func() string { // <======== Get
-			v, _ := c.Data[key].(string)
+			v, exist := c.Data[key].(string)
+			if !exist {
+				return defval
+			}
 			return v
 
 		}, func(value string) out.Info { // <======== Set
@@ -81,10 +84,13 @@ func (c *configStoreS) String(key string) (func() string, func(value string) out
 // ---
 // int
 
-func (c *configStoreS) Int(key string) (func() int, func(value int) out.Info) {
+func (c *configStoreS) Int(key string, defval int) (func() int, func(value int) out.Info) {
 
 	return func() int { // <======== Get
-			v, _ := c.Data[key].(float64)
+			v, exist := c.Data[key].(float64)
+			if !exist {
+				return defval
+			}
 			return int(v)
 
 		}, func(value int) out.Info { // <======== Set
@@ -96,10 +102,13 @@ func (c *configStoreS) Int(key string) (func() int, func(value int) out.Info) {
 // ---
 // bool
 
-func (c *configStoreS) Bool(key string) (func() bool, func(value bool) out.Info) {
+func (c *configStoreS) Bool(key string, defval bool) (func() bool, func(value bool) out.Info) {
 
 	return func() bool { // <======== Get
-			v, _ := c.Data[key].(bool)
+			v, exist := c.Data[key].(bool)
+			if !exist {
+				return defval
+			}
 			return v
 
 		}, func(value bool) out.Info { // <======== Set
