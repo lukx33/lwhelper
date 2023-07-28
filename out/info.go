@@ -199,6 +199,7 @@ func (info *DontUseMeInfoS) NotValid() bool {
 		return false
 	}
 
+	info.InfoPrint()
 	return true
 }
 
