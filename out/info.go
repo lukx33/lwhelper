@@ -22,9 +22,11 @@ type Info interface {
 	CatchError(err error) bool
 	NotValid() bool
 	InfoAddTrace(result ResultT, msg string, skipFrames int)
+	InfoAddCause(parent Info) Info
 	InfoAddVar(name string, value any) Info
 	InfoResult() ResultT
 	InfoMessage() string
+	InfoTrace() []traceS
 	InfoPrint()
 }
 
@@ -157,12 +159,20 @@ func NewForbidden() Info {
 // setters
 
 func (info *DontUseMeInfoS) InfoAddTrace(result ResultT, msg string, skipFrames int) {
+
 	info.Trace = append(info.Trace, traceS{
 		Result:    result,
 		Message:   msg,
 		Traceback: Trace(skipFrames),
 	})
 	info.Result = result
+}
+
+func (info *DontUseMeInfoS) InfoAddCause(parent Info) Info {
+
+	info.Trace = append(info.Trace, parent.InfoTrace()...)
+	info.Result = parent.InfoResult()
+	return info
 }
 
 func (info *DontUseMeInfoS) InfoAddVar(name string, value any) Info {
@@ -199,7 +209,6 @@ func (info *DontUseMeInfoS) NotValid() bool {
 		return false
 	}
 
-	info.InfoPrint()
 	return true
 }
 
@@ -210,6 +219,10 @@ func (info *DontUseMeInfoS) InfoResult() ResultT {
 func (info *DontUseMeInfoS) InfoMessage() string {
 	return fmt.Sprintf("Result: %d", info.Result)
 	// TODO: info.Trace[*].Msg
+}
+
+func (info *DontUseMeInfoS) InfoTrace() []traceS {
+	return info.Trace
 }
 
 func (info *DontUseMeInfoS) InfoPrint() {
