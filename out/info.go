@@ -177,6 +177,7 @@ func (info *DontUseMeInfoS) InfoAddCause(parent Info) Info {
 		Traceback: Trace(0),
 	})
 	info.Result = parent.InfoResult()
+	info.InfoPrint()
 	return info
 }
 
