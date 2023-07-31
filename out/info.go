@@ -171,6 +171,11 @@ func (info *DontUseMeInfoS) InfoAddTrace(result ResultT, msg string, skipFrames 
 func (info *DontUseMeInfoS) InfoAddCause(parent Info) Info {
 
 	info.Trace = append(info.Trace, parent.InfoTrace()...)
+	info.Trace = append(info.Trace, TraceS{
+		Result:    parent.InfoResult(),
+		Message:   "AddCause",
+		Traceback: Trace(0),
+	})
 	info.Result = parent.InfoResult()
 	return info
 }
