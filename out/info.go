@@ -7,12 +7,12 @@ import (
 )
 
 type DontUseMeInfoS struct {
-	Trace  []traceS          `json:"trace"`
+	Trace  []TraceS          `json:"trace"`
 	Vars   map[string]string `json:"vars"`
 	Result ResultT           `json:"result"`
 }
 
-type traceS struct {
+type TraceS struct {
 	Result    ResultT  `json:"result"`
 	Message   string   `json:"message"`
 	Traceback []string `json:"traceback"`
@@ -26,7 +26,7 @@ type Info interface {
 	InfoAddVar(name string, value any) Info
 	InfoResult() ResultT
 	InfoMessage() string
-	InfoTrace() []traceS
+	InfoTrace() []TraceS
 	InfoPrint()
 }
 
@@ -71,7 +71,7 @@ const (
 func NewSuccess() Info {
 
 	return &DontUseMeInfoS{
-		Trace: []traceS{{
+		Trace: []TraceS{{
 			Result:    Success,
 			Traceback: Trace(0),
 		}},
@@ -82,7 +82,7 @@ func NewSuccess() Info {
 func NewSuccessMsg(msg string) Info {
 
 	r := &DontUseMeInfoS{
-		Trace: []traceS{{
+		Trace: []TraceS{{
 			Result:    Success,
 			Message:   msg,
 			Traceback: Trace(0),
@@ -100,7 +100,7 @@ func NewError(err error) Info {
 	}
 
 	r := &DontUseMeInfoS{
-		Trace: []traceS{{
+		Trace: []TraceS{{
 			Result:    InternalServerError,
 			Message:   err.Error(),
 			Traceback: Trace(0),
@@ -115,7 +115,7 @@ func NewError(err error) Info {
 func NewErrorMsg(msg string) Info {
 
 	r := &DontUseMeInfoS{
-		Trace: []traceS{{
+		Trace: []TraceS{{
 			Result:    InternalServerError,
 			Message:   msg,
 			Traceback: Trace(0),
@@ -130,7 +130,7 @@ func NewErrorMsg(msg string) Info {
 func NewNotFound() Info {
 
 	r := &DontUseMeInfoS{
-		Trace: []traceS{{
+		Trace: []TraceS{{
 			Result:    NotFound,
 			Traceback: Trace(0),
 		}},
@@ -144,7 +144,7 @@ func NewNotFound() Info {
 func NewForbidden() Info {
 
 	info := &DontUseMeInfoS{
-		Trace: []traceS{{
+		Trace: []TraceS{{
 			Result:    Forbidden,
 			Traceback: Trace(0),
 		}},
@@ -160,7 +160,7 @@ func NewForbidden() Info {
 
 func (info *DontUseMeInfoS) InfoAddTrace(result ResultT, msg string, skipFrames int) {
 
-	info.Trace = append(info.Trace, traceS{
+	info.Trace = append(info.Trace, TraceS{
 		Result:    result,
 		Message:   msg,
 		Traceback: Trace(skipFrames),
@@ -221,7 +221,7 @@ func (info *DontUseMeInfoS) InfoMessage() string {
 	// TODO: info.Trace[*].Msg
 }
 
-func (info *DontUseMeInfoS) InfoTrace() []traceS {
+func (info *DontUseMeInfoS) InfoTrace() []TraceS {
 	return info.Trace
 }
 
