@@ -1,6 +1,7 @@
 package out
 
 import (
+	"encoding/json"
 	"fmt"
 	"runtime"
 	"strings"
@@ -27,6 +28,7 @@ type Info interface {
 	InfoResult() ResultT
 	InfoMessage() string
 	InfoTrace() []TraceS
+	InfoJSON() []byte
 	InfoPrint()
 }
 
@@ -231,14 +233,14 @@ func (info *DontUseMeInfoS) InfoTrace() []TraceS {
 	return info.Trace
 }
 
-func (info *DontUseMeInfoS) InfoPrint() {
-	// traceStr := strings.Join(r.Traceback, "\n\t")
+func (info *DontUseMeInfoS) InfoJSON() []byte {
+	buf, _ := json.MarshalIndent(info, "", "  ")
+	return buf
+}
 
-	// fmt.Printf("%s\n\t%s\n",
-	// 	r.String(),
-	// 	traceStr,
-	// )
-	PrintJSON(info)
+func (info *DontUseMeInfoS) InfoPrint() {
+	fmt.Println(Trace(3)[0])
+	fmt.Println(string(info.InfoJSON()))
 }
 
 // ---
