@@ -2,6 +2,7 @@ package lwhelper
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -34,4 +35,9 @@ func CleanString(str string) string {
 		}
 		return -1
 	}, str)
+}
+
+func ToInt(s string) int {
+	i, _ := strconv.Atoi(strings.TrimSpace(s))
+	return i
 }
