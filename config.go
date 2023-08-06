@@ -52,15 +52,10 @@ func (c *configStoreS) save() out.Info {
 
 	buf, err := json.MarshalIndent(c.Data, "", "  ")
 	if err != nil {
-		return out.NewError(err)
+		return out.New(err)
 	}
 
-	err = os.WriteFile(c.FilePath, buf, 0644)
-	if err != nil {
-		return out.NewError(err)
-	}
-
-	return out.NewSuccess()
+	return out.New(os.WriteFile(c.FilePath, buf, 0644))
 }
 
 // ---

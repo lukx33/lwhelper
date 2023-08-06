@@ -95,7 +95,7 @@ func NewSuccessMsg(msg string) Info {
 	return r
 }
 
-func NewError(err error) Info {
+func New(err error) Info {
 
 	if err == nil {
 		return NewSuccess()
