@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 	"unsafe"
 )
@@ -23,6 +24,26 @@ func Command(name string, args ...string) *CommandS {
 		Name: name,
 		Args: args,
 	}
+}
+
+func CommandFromString(s string) *CommandS {
+	t := strings.Fields(s)
+	return &CommandS{
+		Name: t[0],
+		Args: t[1:],
+	}
+}
+
+func Run(cmd string) bool {
+
+	_, errorOutput, err := CommandFromString(cmd).RunStdBytes(nil)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(cmd)
+		fmt.Println(string(errorOutput))
+		return false
+	}
+	return true
 }
 
 type RunOptions struct {

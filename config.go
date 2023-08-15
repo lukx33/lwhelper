@@ -31,13 +31,7 @@ func LoadConfigFile(fp string) ConfigStore {
 	}
 
 	buf, _ := os.ReadFile(store.FilePath)
-	if len(buf) > 0 {
-		if store.CatchError(json.Unmarshal(buf, &store.Data)) {
-			return store
-		}
-	}
-
-	return out.SetSuccess(store)
+	return out.CatchError(store, json.Unmarshal(buf, &store.Data))
 }
 
 // ---

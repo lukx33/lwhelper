@@ -20,14 +20,15 @@ type TraceS struct {
 }
 
 type Info interface {
-	CatchError(err error) bool
+	// CatchError(err error) bool
+	// InfoMessage() string
 	NotValid() bool
 	InfoAddTrace(result ResultT, msg string, skipFrames int)
 	InfoAddCause(parent Info) Info
 	InfoAddVar(name string, value any) Info
 	InfoResult() ResultT
-	InfoMessage() string
-	InfoTrace() []TraceS
+	InfoTraces() []TraceS
+	InfoLastTrace() TraceS
 	InfoJSON() []byte
 	InfoPrint()
 }
@@ -172,7 +173,7 @@ func (info *DontUseMeInfoS) InfoAddTrace(result ResultT, msg string, skipFrames 
 
 func (info *DontUseMeInfoS) InfoAddCause(parent Info) Info {
 
-	info.Trace = append(info.Trace, parent.InfoTrace()...)
+	info.Trace = append(info.Trace, parent.InfoTraces()...)
 	info.Trace = append(info.Trace, TraceS{
 		Result:    parent.InfoResult(),
 		Message:   "AddCause",
@@ -193,16 +194,16 @@ func (info *DontUseMeInfoS) InfoAddVar(name string, value any) Info {
 	return info
 }
 
-func (info *DontUseMeInfoS) CatchError(err error) bool {
+// func (info *DontUseMeInfoS) CatchError(err error) bool {
 
-	if err == nil {
-		return false
-	}
+// 	if err == nil {
+// 		return false
+// 	}
 
-	info.InfoAddTrace(InternalServerError, err.Error(), 0)
-	info.InfoPrint()
-	return true
-}
+// 	info.InfoAddTrace(InternalServerError, err.Error(), 0)
+// 	info.InfoPrint()
+// 	return true
+// }
 
 // ---
 // checkers
@@ -213,24 +214,24 @@ func (info *DontUseMeInfoS) NotValid() bool {
 		return true
 	}
 
-	if info.Result == Success {
-		return false
-	}
-
-	return true
+	return info.Result != Success
 }
 
 func (info *DontUseMeInfoS) InfoResult() ResultT {
 	return info.Result
 }
 
-func (info *DontUseMeInfoS) InfoMessage() string {
-	return fmt.Sprintf("Result: %d", info.Result)
-	// TODO: info.Trace[*].Msg
+// func (info *DontUseMeInfoS) InfoMessage() string {
+// 	return fmt.Sprintf("Result: %d", info.Result)
+// 	// TODO: info.Trace[*].Msg
+// }
+
+func (info *DontUseMeInfoS) InfoTraces() []TraceS {
+	return info.Trace
 }
 
-func (info *DontUseMeInfoS) InfoTrace() []TraceS {
-	return info.Trace
+func (info *DontUseMeInfoS) InfoLastTrace() TraceS {
+	return info.Trace[len(info.Trace)-1]
 }
 
 func (info *DontUseMeInfoS) InfoJSON() []byte {
@@ -290,14 +291,12 @@ var framesLessImportant = map[string]bool{
 
 // ---
 
-func SetSuccess[T Info](info T) T {
-	info.InfoAddTrace(Success, "", 0)
-	return info
-}
-
 func CatchError[T Info](info T, err error) T {
 
 	if err == nil {
+		if info.InfoResult() == Unknown {
+			info.InfoAddTrace(Success, "", 0)
+		}
 		return info
 	}
 
