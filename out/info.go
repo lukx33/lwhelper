@@ -291,6 +291,11 @@ var framesLessImportant = map[string]bool{
 
 // ---
 
+func SetSuccess[T Info](info T) T {
+	info.InfoAddTrace(Success, "", 0)
+	return info
+}
+
 func CatchError[T Info](info T, err error) T {
 
 	if err == nil {
