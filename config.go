@@ -3,6 +3,7 @@ package lwhelper
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/lukx33/lwhelper/out"
@@ -48,6 +49,8 @@ func (c *configStoreS) save() out.Info {
 	if err != nil {
 		return out.New(err)
 	}
+
+	os.MkdirAll(filepath.Dir(c.FilePath), 0755)
 
 	return out.New(os.WriteFile(c.FilePath, buf, 0644))
 }
