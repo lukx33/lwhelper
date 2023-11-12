@@ -9,7 +9,21 @@ import (
 	"github.com/google/uuid"
 )
 
+func IDshort() string {
+	return strings.ReplaceAll(
+		uuid.New().String()[:10],
+		"-", "",
+	)
+}
+
 func ID() string {
+	return strings.ReplaceAll(
+		uuid.New().String(),
+		"-", "",
+	)
+}
+
+func IDlong() string {
 	return strings.ReplaceAll(
 		uuid.New().String()+uuid.New().String(),
 		"-", "",
