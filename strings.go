@@ -35,8 +35,8 @@ var plReplacer = strings.NewReplacer("ą", "a", "ć", "c", "ę", "e", "ł", "l",
 
 func KeyString(s string) string {
 	// pozostawia tylko male literki, cyfry i -
-	key := plReplacer.Replace(s)
-	key = strings.ToLower(key)
+	key := strings.ToLower(s)
+	key = plReplacer.Replace(key)
 	key = nonAlphanumericRegex.ReplaceAllString(key, "-")
 	key = strings.Trim(key, "-")
 	return key
