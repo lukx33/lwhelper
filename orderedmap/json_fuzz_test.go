@@ -8,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"golang.org/x/exp/constraints"
 )
 
 func FuzzRoundTripJSON(f *testing.F) {
@@ -75,7 +76,7 @@ func FuzzRoundTripJSON(f *testing.F) {
 }
 
 // only works for fairly basic maps, that's why it's just in this file
-func assertOrderedMapsEqual[K comparable, V any](t *testing.T, v1, v2 any) bool {
+func assertOrderedMapsEqual[K constraints.Ordered, V any](t *testing.T, v1, v2 any) bool {
 	om1, ok1 := v1.(*OrderedMap[K, V])
 	om2, ok2 := v2.(*OrderedMap[K, V])
 

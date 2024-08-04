@@ -7,11 +7,12 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/exp/constraints"
 )
 
 // assertOrderedPairsEqual asserts that the map contains the given keys and values
 // from oldest to newest.
-func assertOrderedPairsEqual[K comparable, V any](
+func assertOrderedPairsEqual[K constraints.Ordered, V any](
 	t *testing.T, orderedMap *OrderedMap[K, V], expectedKeys []K, expectedValues []V,
 ) {
 	t.Helper()
@@ -20,7 +21,7 @@ func assertOrderedPairsEqual[K comparable, V any](
 	assertOrderedPairsEqualFromOldest(t, orderedMap, expectedKeys, expectedValues)
 }
 
-func assertOrderedPairsEqualFromNewest[K comparable, V any](
+func assertOrderedPairsEqualFromNewest[K constraints.Ordered, V any](
 	t *testing.T, orderedMap *OrderedMap[K, V], expectedKeys []K, expectedValues []V,
 ) {
 	t.Helper()
@@ -35,7 +36,7 @@ func assertOrderedPairsEqualFromNewest[K comparable, V any](
 	}
 }
 
-func assertOrderedPairsEqualFromOldest[K comparable, V any](
+func assertOrderedPairsEqualFromOldest[K constraints.Ordered, V any](
 	t *testing.T, orderedMap *OrderedMap[K, V], expectedKeys []K, expectedValues []V,
 ) {
 	t.Helper()
@@ -50,7 +51,7 @@ func assertOrderedPairsEqualFromOldest[K comparable, V any](
 	}
 }
 
-func assertLenEqual[K comparable, V any](t *testing.T, orderedMap *OrderedMap[K, V], expectedLen int) {
+func assertLenEqual[K constraints.Ordered, V any](t *testing.T, orderedMap *OrderedMap[K, V], expectedLen int) {
 	t.Helper()
 
 	assert.Equal(t, expectedLen, orderedMap.Len())

@@ -4,43 +4,45 @@
 // All operations are constant-time.
 //
 // Github repo: https://github.com/wk8/go-ordered-map
-//
 package orderedmap
 
 import (
+	"cmp"
 	"fmt"
+	"sort"
 
 	list "github.com/bahlo/generic-list-go"
+	"golang.org/x/exp/constraints"
 )
 
-type Pair[K comparable, V any] struct {
+type Pair[K constraints.Ordered, V any] struct {
 	Key   K
 	Value V
 
 	element *list.Element[*Pair[K, V]]
 }
 
-type OrderedMap[K comparable, V any] struct {
+type OrderedMap[K constraints.Ordered, V any] struct {
 	pairs map[K]*Pair[K, V]
 	list  *list.List[*Pair[K, V]]
 }
 
-type initConfig[K comparable, V any] struct {
+type initConfig[K constraints.Ordered, V any] struct {
 	capacity    int
 	initialData []Pair[K, V]
 }
 
-type InitOption[K comparable, V any] func(config *initConfig[K, V])
+type InitOption[K constraints.Ordered, V any] func(config *initConfig[K, V])
 
 // WithCapacity allows giving a capacity hint for the map, akin to the standard make(map[K]V, capacity).
-func WithCapacity[K comparable, V any](capacity int) InitOption[K, V] {
+func WithCapacity[K constraints.Ordered, V any](capacity int) InitOption[K, V] {
 	return func(c *initConfig[K, V]) {
 		c.capacity = capacity
 	}
 }
 
 // WithInitialData allows passing in initial data for the map.
-func WithInitialData[K comparable, V any](initialData ...Pair[K, V]) InitOption[K, V] {
+func WithInitialData[K constraints.Ordered, V any](initialData ...Pair[K, V]) InitOption[K, V] {
 	return func(c *initConfig[K, V]) {
 		c.initialData = initialData
 		if c.capacity < len(initialData) {
@@ -52,7 +54,7 @@ func WithInitialData[K comparable, V any](initialData ...Pair[K, V]) InitOption[
 // New creates a new OrderedMap.
 // options can either be one or several InitOption[K, V], or a single integer,
 // which is then interpreted as a capacity hint, à la make(map[K]V, capacity).
-func New[K comparable, V any](options ...any) *OrderedMap[K, V] { //nolint:varnamelen
+func New[K constraints.Ordered, V any](options ...any) *OrderedMap[K, V] { //nolint:varnamelen
 	orderedMap := &OrderedMap[K, V]{}
 
 	var config initConfig[K, V]
@@ -198,7 +200,7 @@ func (p *Pair[K, V]) Prev() *Pair[K, V] {
 	return listElementToPair(p.element.Prev())
 }
 
-func listElementToPair[K comparable, V any](element *list.Element[*Pair[K, V]]) *Pair[K, V] {
+func listElementToPair[K constraints.Ordered, V any](element *list.Element[*Pair[K, V]]) *Pair[K, V] {
 	if element == nil {
 		return nil
 	}
@@ -207,7 +209,7 @@ func listElementToPair[K comparable, V any](element *list.Element[*Pair[K, V]]) 
 
 // KeyNotFoundError may be returned by functions in this package when they're called with keys that are not present
 // in the map.
-type KeyNotFoundError[K comparable] struct {
+type KeyNotFoundError[K constraints.Ordered] struct {
 	MissingKey K
 }
 
@@ -293,4 +295,18 @@ func (om *OrderedMap[K, V]) GetAndMoveToFront(key K) (val V, err error) {
 	}
 
 	return
+}
+
+func (om *OrderedMap[K, V]) KeysInAlphabeticalOrder() []K {
+
+	keys := []K{}
+	for key := range om.pairs {
+		keys = append(keys, key)
+	}
+
+	sort.Slice(keys, func(i, j int) bool {
+		return cmp.Less(keys[i], keys[j])
+	})
+
+	return keys
 }
