@@ -42,6 +42,15 @@ func KeyString(s string) string {
 	return key
 }
 
+func KeyString2(s string) string {
+	// pozostawia tylko male literki, cyfry i _
+	key := strings.ToLower(s)
+	key = plReplacer.Replace(key)
+	key = nonAlphanumericRegex.ReplaceAllString(key, "_")
+	key = strings.Trim(key, "_")
+	return key
+}
+
 func CleanString(str string) string {
 	return strings.Map(func(r rune) rune {
 		if unicode.IsGraphic(r) || r == '\n' {
