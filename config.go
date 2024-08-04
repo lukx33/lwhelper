@@ -32,13 +32,13 @@ func LoadConfigFile(fp string) ConfigStore {
 	}
 
 	buf, _ := os.ReadFile(store.FilePath)
-	return out.CatchError(store, json.Unmarshal(buf, &store.Data))
+	return out.CheckErrorFor(store, json.Unmarshal(buf, &store.Data))
 }
 
 // ---
 
 type configStoreS struct {
-	out.DontUseMeInfoS
+	out.StructS
 	FilePath string
 	Data     map[string]interface{}
 }
@@ -47,12 +47,12 @@ func (c *configStoreS) save() out.Info {
 
 	buf, err := json.MarshalIndent(c.Data, "", "  ")
 	if err != nil {
-		return out.New(err)
+		return out.CheckError(err)
 	}
 
 	os.MkdirAll(filepath.Dir(c.FilePath), 0755)
 
-	return out.New(os.WriteFile(c.FilePath, buf, 0644))
+	return out.CheckError(os.WriteFile(c.FilePath, buf, 0644))
 }
 
 // ---
