@@ -47,8 +47,7 @@ func KeyString(s string) string {
 
 func KeyString2(s string) string {
 	// pozostawia tylko literki i cyfry
-	key := strings.ToLower(s)
-	key = plReplacer.Replace(key)
+	key := plReplacer.Replace(s)
 	key = nonAlphanumericRegex.ReplaceAllString(key, "")
 	return key
 }
