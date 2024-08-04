@@ -31,7 +31,10 @@ func IDlong() string {
 }
 
 var nonAlphanumericRegex = regexp.MustCompile(`[^\p{L}\p{N}]+`)
-var plReplacer = strings.NewReplacer("ą", "a", "ć", "c", "ę", "e", "ł", "l", "ń", "n", "ó", "o", "ś", "s", "ź", "z", "ż", "z")
+var plReplacer = strings.NewReplacer(
+	"ą", "a", "ć", "c", "ę", "e", "ł", "l", "ń", "n", "ó", "o", "ś", "s", "ź", "z", "ż", "z",
+	"Ą", "A", "Ć", "C", "Ę", "E", "Ł", "L", "Ń", "N", "Ó", "O", "Ś", "S", "Ż", "Z", "Ź", "Z",
+)
 
 func KeyString(s string) string {
 	// pozostawia tylko male literki, cyfry i -
@@ -43,11 +46,10 @@ func KeyString(s string) string {
 }
 
 func KeyString2(s string) string {
-	// pozostawia tylko male literki, cyfry i _
+	// pozostawia tylko literki i cyfry
 	key := strings.ToLower(s)
 	key = plReplacer.Replace(key)
-	key = nonAlphanumericRegex.ReplaceAllString(key, "_")
-	key = strings.Trim(key, "_")
+	key = nonAlphanumericRegex.ReplaceAllString(key, "")
 	return key
 }
 
