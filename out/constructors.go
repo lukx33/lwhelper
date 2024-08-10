@@ -165,3 +165,11 @@ func CheckErrorFor[T Info](info T, err error) T {
 	PrintJSON(info)
 	return info
 }
+
+func ErrorFor[T Info](info T, rc result.CodeT, errMsg string) T {
+
+	info.InfoAddStep(rc, 0)
+	info.InfoAddVar("err", errMsg)
+	PrintJSON(info)
+	return info
+}
