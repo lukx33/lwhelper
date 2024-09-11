@@ -1,9 +1,11 @@
 package lwhelper
 
 import (
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/google/uuid"
@@ -69,4 +71,62 @@ func ToInt(s string) int {
 func ToInt64(s string) int64 {
 	i, _ := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
 	return i
+
+	// 	var n int64
+	// 	fmt.Sscan(strings.TrimSpace(s), &n)
+	// 	return n
+}
+func ToFloat64(s string) float64 {
+	res, _ := strconv.ParseFloat(s, 64)
+	return res
+}
+
+func DateStringToTime(s string) time.Time {
+	t, _ := time.Parse("2006-01-02", s)
+	return t
+}
+
+func StringToTime(s string) time.Time {
+	t, _ := time.Parse("2006-01-02 15:04:05", s)
+	return t
+}
+
+func UnixToString(t int64) string {
+	return time.Unix(t, 0).Format("2006-01-02 15:04")
+}
+
+func TimeToString(t time.Time) string {
+	return t.Format("2006-01-02 15:04")
+}
+
+func TimeToDate(t time.Time) string {
+	return t.Format("2006-01-02")
+}
+
+func Sum[T interface{ int | float64 }](vec []T) T {
+	var sum T
+	for _, elt := range vec {
+		sum = sum + elt
+	}
+	return sum
+}
+
+func Max(s []float64) float64 {
+	res := 0.0
+	for _, v := range s {
+		if v > res {
+			res = v
+		}
+	}
+	return res
+}
+
+func Min(s []float64) float64 {
+	res := math.MaxFloat64
+	for _, v := range s {
+		if v < res {
+			res = v
+		}
+	}
+	return res
 }
