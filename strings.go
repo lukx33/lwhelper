@@ -1,6 +1,7 @@
 package lwhelper
 
 import (
+	"cmp"
 	"math"
 	"regexp"
 	"strconv"
@@ -103,7 +104,7 @@ func TimeToDate(t time.Time) string {
 	return t.Format("2006-01-02")
 }
 
-func Sum[T interface{ int | float64 }](vec []T) T {
+func Sum[T cmp.Ordered](vec []T) T {
 	var sum T
 	for _, elt := range vec {
 		sum = sum + elt
@@ -111,8 +112,8 @@ func Sum[T interface{ int | float64 }](vec []T) T {
 	return sum
 }
 
-func Max(s []float64) float64 {
-	res := 0.0
+func Max[T cmp.Ordered](s []T) T {
+	var res T
 	for _, v := range s {
 		if v > res {
 			res = v
