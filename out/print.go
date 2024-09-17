@@ -20,7 +20,13 @@ func PrintJSON(in interface{}) {
 
 		switch v := in.(type) {
 		case *StructS:
-			fmt.Println(v.Vars["msg"])
+			msg := v.Vars["msg"]
+			if v.Vars["err"] != "" {
+				msg = "ERROR: " + v.Vars["err"]
+			}
+			if msg != "" {
+				fmt.Println(msg)
+			}
 			return
 		}
 	}
