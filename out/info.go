@@ -9,8 +9,8 @@ import (
 )
 
 type StructS struct {
-	Step []StepS           `json:"step"`
-	Vars map[string]string `json:"vars"`
+	Step []StepS           `json:"step" cbor:",omitempty"`
+	Vars map[string]string `json:"vars" cbor:",omitempty"`
 }
 
 type StepS struct {
