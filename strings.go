@@ -82,6 +82,16 @@ func ToFloat64(s string) float64 {
 	return res
 }
 
+func Float64Round(num float64, precision int) float64 {
+
+	round := func(num float64) int {
+		return int(num + math.Copysign(0.5, num))
+	}
+
+	output := math.Pow(10, float64(precision))
+	return float64(round(num*output)) / output
+}
+
 func DateStringToTime(s string) time.Time {
 	t, _ := time.Parse("2006-01-02", s)
 	return t
