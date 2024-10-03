@@ -77,6 +77,7 @@ func ToInt64(s string) int64 {
 	// 	fmt.Sscan(strings.TrimSpace(s), &n)
 	// 	return n
 }
+
 func ToFloat64(s string) float64 {
 	res, _ := strconv.ParseFloat(s, 64)
 	return res

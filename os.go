@@ -12,3 +12,10 @@ func OsArg(idx int) string {
 	}
 	return os.Args[idx]
 }
+
+func OsArgs(idx int) []string {
+	if len(os.Args) <= idx {
+		return append(os.Args, make([]string, idx)...)[:idx]
+	}
+	return os.Args[:idx]
+}
