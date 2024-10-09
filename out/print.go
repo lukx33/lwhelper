@@ -3,12 +3,16 @@ package out
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 )
 
-var Debug = os.Getenv("LW_OUT_DEBUG") == "true"
+var Debug = false
+var DoPrint = true
 
 func PrintJSON(in interface{}) {
+
+	if !DoPrint {
+		return
+	}
 
 	if Debug {
 		fmt.Println(Trace(3)[0])
@@ -20,6 +24,7 @@ func PrintJSON(in interface{}) {
 
 		switch v := in.(type) {
 		case *StructS:
+
 			msg := v.Vars["msg"]
 			if v.Vars["err"] != "" {
 				msg = "ERROR: " + v.Vars["err"]
@@ -30,6 +35,8 @@ func PrintJSON(in interface{}) {
 			return
 		}
 	}
+
+	// fmt.Println(reflect.TypeOf(in))
 
 	buf, err := json.MarshalIndent(in, "", "  ")
 	if err != nil {
