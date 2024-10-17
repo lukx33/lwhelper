@@ -2,13 +2,27 @@ package lwhelper
 
 import "os"
 
-func ReadFile(filepath string) string {
-	return string(Must(os.ReadFile(filepath)))
+func ReadFile(filePath string) string {
+	return string(Must(os.ReadFile(filePath)))
 }
 
-func FileExist(filepath string) bool {
-	if fs, err := os.Stat(filepath); err == nil {
+func FileExist(filePath string) bool {
+	if fs, err := os.Stat(filePath); err == nil {
 		return !fs.IsDir()
+	}
+	return false
+}
+
+func DirExist(dirPath string) bool {
+	if fs, err := os.Stat(dirPath); err == nil {
+		return fs.IsDir()
+	}
+	return false
+}
+
+func PathExist(path string) bool {
+	if _, err := os.Stat(path); err == nil {
+		return true
 	}
 	return false
 }
