@@ -16,3 +16,16 @@ func GetOutboundIP() net.IP {
 
 	return localAddr.IP
 }
+
+func GetDomainIPs(domainName string) []string {
+
+	res := []string{}
+	ips, _ := net.LookupIP(domainName)
+	for _, ip := range ips {
+		if ipv4 := ip.To4(); ipv4 != nil {
+			res = append(res, ipv4.String())
+		}
+	}
+
+	return res
+}

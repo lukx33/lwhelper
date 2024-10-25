@@ -2,6 +2,8 @@ package lwhelper
 
 import (
 	"cmp"
+	"crypto/md5"
+	"encoding/hex"
 	"math"
 	"regexp"
 	"strconv"
@@ -141,4 +143,9 @@ func Min(s []float64) float64 {
 		}
 	}
 	return res
+}
+
+func GetMD5Hash(buf []byte) string {
+	hash := md5.Sum(buf)
+	return hex.EncodeToString(hash[:])
 }

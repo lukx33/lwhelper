@@ -1,6 +1,9 @@
 package lwhelper
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 func ReadFile(filePath string) string {
 	return string(Must(os.ReadFile(filePath)))
@@ -40,4 +43,24 @@ func OsArgs(idx int) []string {
 		return append(os.Args, make([]string, idx)...)[:idx]
 	}
 	return os.Args[:idx]
+}
+
+func FileHasThisLine(filePath, line string) bool {
+
+	buf, _ := os.ReadFile(filePath)
+	return StringHasThisLine(string(buf), line)
+}
+
+func StringHasThisLine(s, line string) bool {
+
+	line = strings.TrimSpace(line)
+
+	for _, l := range strings.Split(s, "\n") {
+		l = strings.TrimSpace(l)
+		if l == line {
+			return true
+		}
+	}
+
+	return false
 }

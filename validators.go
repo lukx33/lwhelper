@@ -20,7 +20,7 @@ func ValidDomain(s string) bool {
 	return err == nil
 }
 
-func GetMainDomain(domainName string) string {
+func GetDomainBaseName(domainName string) string {
 
 	t := strings.Split(domainName, ".")
 	if len(t) < 2 {
