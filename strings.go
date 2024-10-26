@@ -1,9 +1,11 @@
 package lwhelper
 
 import (
+	"bytes"
 	"cmp"
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"math"
 	"regexp"
 	"strconv"
@@ -148,4 +150,15 @@ func Min(s []float64) float64 {
 func GetMD5Hash(buf []byte) string {
 	hash := md5.Sum(buf)
 	return hex.EncodeToString(hash[:])
+}
+
+func GetSHA256(in []byte) string {
+	var buf bytes.Buffer
+	for i, f := range in {
+		if i > 0 {
+			fmt.Fprintf(&buf, ":")
+		}
+		fmt.Fprintf(&buf, "%02X", f)
+	}
+	return buf.String()
 }
