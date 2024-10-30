@@ -2,8 +2,10 @@ package lwhelper
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"runtime/debug"
 	"strings"
+	"time"
 )
 
 func Must[T any](out T, err error) T {
@@ -19,4 +21,15 @@ func PanicHandler() {
 		_, stack, _ := strings.Cut(string(debug.Stack()), "panic")
 		fmt.Println("Stack:", stack)
 	}
+}
+
+func SleepRandomSec(min, max int) {
+	if min <= 0 {
+		min = 2
+	}
+	if min > max {
+		max = min + 5
+	}
+
+	time.Sleep(time.Duration(rand.IntN(max-min)+min) * time.Second)
 }
