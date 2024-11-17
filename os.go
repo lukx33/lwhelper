@@ -1,7 +1,9 @@
 package lwhelper
 
 import (
+	"errors"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -63,4 +65,36 @@ func StringHasThisLine(s, line string) bool {
 	}
 
 	return false
+}
+
+func FileFind(startPath, nameSuffix string, fullPath bool) ([]string, error) {
+
+	if startPath == "" {
+		return nil, errors.New("startPath is empty")
+	}
+
+	if startPath[len(startPath)-1] != '/' {
+		startPath += "/"
+	}
+
+	res := []string{}
+
+	err := filepath.Walk(startPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && strings.HasSuffix(info.Name(), nameSuffix) {
+
+			if fullPath {
+				res = append(res, path)
+
+			} else {
+				res = append(res, strings.TrimPrefix(path, startPath))
+			}
+		}
+		return nil
+	})
+
+	return res, err
 }
