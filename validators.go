@@ -1,6 +1,7 @@
 package lwhelper
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -8,7 +9,8 @@ import (
 )
 
 var (
-	emailRegex = regexp.MustCompile(`^([a-zA-Z0-9.!#$%&*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)?$`)
+	emailRegex  = regexp.MustCompile(`^([a-zA-Z0-9.!#$%&*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)?$`)
+	digitsRegex = regexp.MustCompile(`\D`)
 )
 
 func ValidEmail(s string) bool {
@@ -38,4 +40,25 @@ func GetDomainBaseName(domainName string) string {
 	//
 
 	return strings.Join(t[len(t)-tld:], ".")
+}
+
+//
+
+func ValidPhone(s, countryPrefix string) string {
+
+	// usuwam wszystko co nie jest cyfra
+	s = digitsRegex.ReplaceAllString(s, "")
+
+	// usuwam prefix
+	s = strings.TrimPrefix(s, countryPrefix)
+
+	// 000 000 000
+	if len(s) == 9 {
+		// nr jest poprawny
+		return fmt.Sprintf("+%s %s", countryPrefix, s)
+	}
+
+	// nr jest NIEpoprawny
+	return ""
+
 }

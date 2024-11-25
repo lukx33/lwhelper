@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/bahlo/generic-list-go v0.2.0
+	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/buger/jsonparser v1.1.1
 	github.com/google/uuid v1.6.0
 	github.com/jaytaylor/go-hostsfile v0.0.0-20220426042432-61485ac1fa6c

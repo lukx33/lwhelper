@@ -6,6 +6,8 @@ import (
 	"runtime/debug"
 	"strings"
 	"time"
+
+	"github.com/barkimedes/go-deepcopy"
 )
 
 func Must[T any](out T, err error) T {
@@ -32,4 +34,12 @@ func SleepRandomSec(min, max int) {
 	}
 
 	time.Sleep(time.Duration(rand.IntN(max-min)+min) * time.Second)
+}
+
+func DeepCopy[T any](src T) *T {
+	copy, err := deepcopy.Anything(&src)
+	if err != nil {
+		return nil
+	}
+	return copy.(*T)
 }
