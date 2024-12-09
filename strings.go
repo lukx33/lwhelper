@@ -162,3 +162,16 @@ func GetSHA256(in []byte) string {
 	}
 	return buf.String()
 }
+
+func StringSplit(s, delimiter string) []string {
+
+	res := []string{}
+	for _, x := range strings.Split(s, delimiter) {
+		x = strings.TrimSpace(x)
+		if x == "" {
+			continue
+		}
+		res = append(res, x)
+	}
+	return res
+}
