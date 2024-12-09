@@ -2,6 +2,7 @@ package lwhelper
 
 import (
 	"errors"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -97,4 +98,18 @@ func FileFind(startPath, nameSuffix string, fullPath bool) ([]string, error) {
 	})
 
 	return res, err
+}
+
+func DirSizeInMB(path string) (int64, error) {
+	var sizeBytes int64
+	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			sizeBytes += info.Size()
+		}
+		return err
+	})
+	return int64(math.Ceil(float64(sizeBytes) / 1048576)), err
 }

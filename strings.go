@@ -175,3 +175,8 @@ func StringSplit(s, delimiter string) []string {
 	}
 	return res
 }
+
+func MD5Hash(text string) string {
+	hash := md5.Sum([]byte(text))
+	return hex.EncodeToString(hash[:])
+}
