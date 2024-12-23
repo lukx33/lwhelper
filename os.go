@@ -68,7 +68,7 @@ func StringHasThisLine(s, line string) bool {
 	return false
 }
 
-func FileFind(startPath, nameSuffix string, fullPath bool) ([]string, error) {
+func FileFind(startPath, nameSuffix string, returnFullPath bool) ([]string, error) {
 
 	if startPath == "" {
 		return nil, errors.New("startPath is empty")
@@ -87,7 +87,7 @@ func FileFind(startPath, nameSuffix string, fullPath bool) ([]string, error) {
 
 		if !info.IsDir() && strings.HasSuffix(info.Name(), nameSuffix) {
 
-			if fullPath {
+			if returnFullPath {
 				res = append(res, path)
 
 			} else {
