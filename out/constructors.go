@@ -162,7 +162,7 @@ func CheckErrorFor[T Info](info T, err error) T {
 
 	info.InfoAddStep(result.Error, 0)
 	info.InfoAddVar("err", err.Error())
-	PrintJSON(info)
+	// PrintJSON(info)
 	return info
 }
 
