@@ -49,24 +49,14 @@ func Ptr[T any](v T) *T {
 }
 
 var Colors = []string{
-	"#FF6384", // Czerwony różowy
-	"#36A2EB", // Niebieski
-	"#FFCE56", // Żółty
-	"#4BC0C0", // Turkusowy
-	"#9966FF", // Fioletowy
-	"#FF9F40", // Pomarańczowy
-	"#C9CBCF", // Szary jasny
-	"#2E2E2E", // Ciemny szary
-	"#FF5733", // Ceglasty
-	"#33FF57", // Zielony jasny
-	"#33FFF6", // Turkusowy jasny
-	"#3375FF", // Niebieski mocny
-	"#8A33FF", // Fioletowy głęboki
-	"#FF33C7", // Różowy intensywny
-	"#FFC733", // Złoty
-	"#B833FF", // Purpurowy
-	"#33FF8A", // Miętowy
-	"#FF3333", // Intensywny czerwony
-	"#33FFFF", // Cyan jasny
-	"#3333FF", // Granatowy
+	"#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40",
+	"#C9CBCF", "#2E2E2E", "#FF5733", "#33FF57", "#33FFF6", "#3375FF",
+	"#8A33FF", "#FF33C7", "#FFC733", "#B833FF", "#33FF8A", "#FF3333",
+	"#33FFFF", "#3333FF", "#1F77B4", "#FF7F0E", "#2CA02C", "#D62728",
+	"#9467BD", "#8C564B", "#E377C2", "#7F7F7F", "#BCBD22", "#17BECF",
+	"#FCE205", "#FF5722", "#009688", "#795548", "#607D8B", "#3F51B5",
+	"#E91E63", "#9C27B0", "#673AB7", "#4CAF50", "#CDDC39", "#FFC107",
+	"#00BCD4", "#8BC34A", "#FF9800", "#FFEB3B", "#9E9E9E", "#2196F3",
+	"#03A9F4", "#C2185B", "#512DA8", "#304FFE", "#0288D1", "#388E3C",
+	"#7B1FA2", "#E65100", "#BF360C", "#FF5252", "#448AFF", "#76FF03",
 }
