@@ -22,6 +22,10 @@ func ValidDomain(s string) bool {
 	return err == nil
 }
 
+func ValidDomainOrWildcard(s string) bool {
+	return ValidDomain(strings.TrimPrefix(s, "*."))
+}
+
 func GetDomainBaseName(domainName string) string {
 
 	t := strings.Split(domainName, ".")
