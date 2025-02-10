@@ -195,5 +195,5 @@ func HexColor(s string, opacity float64) string {
 		c.G *= 17
 		c.B *= 17
 	}
-	return fmt.Sprintf("rgba(%d, %d, %d, %.1f)\n", c.R, c.G, c.B, opacity)
+	return fmt.Sprintf("rgba(%d, %d, %d, %.1f)", c.R, c.G, c.B, opacity)
 }
