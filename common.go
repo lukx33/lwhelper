@@ -49,7 +49,7 @@ func Ptr[T any](v T) *T {
 }
 
 var Colors = []string{
-	"#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40",
+	"#36A2EB", "#FF6384", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40",
 	"#C9CBCF", "#2E2E2E", "#FF5733", "#33FF57", "#33FFF6", "#3375FF",
 	"#8A33FF", "#FF33C7", "#FFC733", "#B833FF", "#33FF8A", "#FF3333",
 	"#33FFFF", "#3333FF", "#1F77B4", "#FF7F0E", "#2CA02C", "#D62728",
