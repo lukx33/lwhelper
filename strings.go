@@ -6,6 +6,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
+	"image/color"
 	"math"
 	"regexp"
 	"strconv"
@@ -179,4 +180,20 @@ func StringSplit(s, delimiter string) []string {
 func MD5Hash(text string) string {
 	hash := md5.Sum([]byte(text))
 	return hex.EncodeToString(hash[:])
+}
+
+func HexColor(s string, opacity float64) string {
+	c := color.RGBA{}
+
+	switch len(s) {
+	case 7:
+		fmt.Sscanf(s, "#%02x%02x%02x", &c.R, &c.G, &c.B)
+	case 4:
+		fmt.Sscanf(s, "#%1x%1x%1x", &c.R, &c.G, &c.B)
+		// Double the hex digits:
+		c.R *= 17
+		c.G *= 17
+		c.B *= 17
+	}
+	return fmt.Sprintf("rgba(%d, %d, %d, %.1f)\n", c.R, c.G, c.B, opacity)
 }
