@@ -9,7 +9,9 @@ import (
 )
 
 func ReadFile(filePath string) string {
-	return string(Must(os.ReadFile(filePath)))
+
+	buf, _ := os.ReadFile(filePath)
+	return string(buf)
 }
 
 func FileExist(filePath string) bool {
