@@ -166,6 +166,7 @@ func GetSHA256(in []byte) string {
 
 func StringSplit(s, delimiter string) []string {
 
+	s = strings.TrimSpace(s)
 	res := []string{}
 	for _, x := range strings.Split(s, delimiter) {
 		x = strings.TrimSpace(x)
