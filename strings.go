@@ -205,3 +205,21 @@ func HexColor(s string, opacity float64) string {
 	}
 	return fmt.Sprintf("rgba(%d, %d, %d, %.1f)", c.R, c.G, c.B, opacity)
 }
+
+//
+
+func CleanInvisibleChars(s string) string {
+	var builder strings.Builder
+
+	for _, r := range s {
+		if unicode.IsControl(r) && r != '\n' && r != '\t' {
+			continue
+		}
+		if unicode.In(r, unicode.Cf, unicode.Zl, unicode.Zp) {
+			continue
+		}
+		builder.WriteRune(r)
+	}
+
+	return builder.String()
+}
