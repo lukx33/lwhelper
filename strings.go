@@ -223,3 +223,14 @@ func CleanInvisibleChars(s string) string {
 
 	return builder.String()
 }
+
+//
+
+func StringSplitTwo(s, sep string) (string, string) {
+
+	x := strings.SplitN(s, sep, 2)
+	if len(x) < 2 {
+		x = append(x, "")
+	}
+	return x[0], x[1]
+}
