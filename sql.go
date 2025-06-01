@@ -6,5 +6,5 @@ import (
 )
 
 func QueryIn(key string, list []string) string {
-	return fmt.Sprintf("\"%s\" IN (\"%s\")", key, strings.Join(list, "\",\""))
+	return fmt.Sprintf("\"%s\" IN ('%s')", key, strings.Join(list, "\",\""))
 }
