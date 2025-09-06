@@ -64,8 +64,18 @@ func Max[T cmp.Ordered](s []T) T {
 	return res
 }
 
-func Min(s []float64) float64 {
+func MinFloat64(s []float64) float64 {
 	res := math.MaxFloat64
+	for _, v := range s {
+		if v < res {
+			res = v
+		}
+	}
+	return res
+}
+
+func MinInt64(s []int64) int64 {
+	res := int64(math.MaxInt64)
 	for _, v := range s {
 		if v < res {
 			res = v
