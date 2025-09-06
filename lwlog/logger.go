@@ -18,7 +18,7 @@ import (
 func NewLogger() *slog.Logger {
 	return slog.New(&logBufferHandler{
 		handler: slog.NewJSONHandler(os.Stdout, nil),
-	})
+	}).With("instance", os.Getenv("HOSTNAME"))
 }
 
 //
