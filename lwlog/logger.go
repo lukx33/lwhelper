@@ -18,7 +18,7 @@ import (
 func NewLogger() *slog.Logger {
 	return slog.New(&logBufferHandler{
 		handler: slog.NewJSONHandler(os.Stdout, nil),
-	}).With("instance", os.Getenv("HOSTNAME"))
+	})
 }
 
 //
@@ -32,6 +32,12 @@ type logBufferHandler struct {
 	handler slog.Handler
 }
 
+type JsonRecord struct {
+	Level string            `json:"Level"`
+	Msg   string            `json:"Msg"`
+	Attrs map[string]string `json:"Attrs"`
+}
+
 //
 
 func (h *logBufferHandler) Enabled(ctx context.Context, level slog.Level) bool {
@@ -43,7 +49,19 @@ func (h *logBufferHandler) Handle(ctx context.Context, r slog.Record) error {
 
 	if loggerWebSocketConnected {
 
-		buf, _ := json.Marshal(r)
+		attrs := map[string]string{}
+		r.Attrs(func(a slog.Attr) bool {
+			attrs[a.Key] = a.Value.String()
+			return true
+		})
+
+		jr := JsonRecord{
+			Level: r.Level.String(),
+			Msg:   r.Message,
+			Attrs: attrs,
+		}
+
+		buf, _ := json.Marshal(jr)
 		loggerBuffer <- buf
 		// fmt.Println("delay:", time.Since(r.Time))
 	}
@@ -99,7 +117,7 @@ func HttpLogsHandler(w http.ResponseWriter, r *http.Request) {
 	// Goroutine do wysyłania pingów
 	pingTicker := time.NewTicker(3 * time.Second)
 
-	if err := conn.WriteMessage(websocket.TextMessage, []byte("WebSocket connection established for logs")); err != nil {
+	if err := conn.WriteMessage(websocket.TextMessage, []byte("WebSocket connection established for logs from: "+os.Getenv("HOSTNAME"))); err != nil {
 		fmt.Println("Failed to send logs", "error", err)
 		return
 	}
